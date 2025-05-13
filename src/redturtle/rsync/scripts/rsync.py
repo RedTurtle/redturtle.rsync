@@ -216,11 +216,13 @@ class ScriptRunner:
                 msg = f"[UPDATED] {updated.absolute_url()}"
                 self.log_info(msg=msg)
                 self.sync_uids.add(updated.UID())
+                updated.reindexObject()
         else:
             self.n_updated += 1
             msg = f"[UPDATED] {self.get_frontend_url(item)}"
             self.log_info(msg=msg)
             self.sync_uids.add(item.UID())
+            item.reindexObject()
 
     def delete_items(self, data):
         """
