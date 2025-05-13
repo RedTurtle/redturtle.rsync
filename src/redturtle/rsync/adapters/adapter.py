@@ -1,11 +1,9 @@
 from pathlib import Path
 from redturtle.rsync.interfaces import IRedturtleRsyncAdapter
-from redturtle.rsync.interfaces import IRedturtleRsyncAdapter
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
 from zope.component import adapter
 from zope.interface import implementer
-from zope.interface import Interface
 from zope.interface import Interface
 
 import json
@@ -65,11 +63,11 @@ class RsyncAdapterBase:
         session.mount("https://", http_adapter)
         return session
 
-    def log_item_title(self, start):
+    def log_item_title(self, start, options):
         """
         Return the title of the log item for the rsync command.
         """
-        return f"Report sync {start.isoformat()}"
+        return f"Report sync {start.strftime('%d-%m-%Y %H:%M:%S')}"
 
     def set_args(self, parser):
         """
@@ -100,7 +98,7 @@ class RsyncAdapterBase:
                 with open(file_path, "r") as f:
                     try:
                         data = json.load(f)
-                    except json.JSONDecodeError as e:
+                    except json.JSONDecodeError:
                         data = f.read()
             else:
                 error = f"Source file not found in: {file_path}"
@@ -136,7 +134,7 @@ class RsyncAdapterBase:
         """
         raise NotImplementedError()
 
-    def create_item(self, row):
+    def create_item(self, row, options):
         """
         Create a new content item from the given row of data.
         This method should be implemented by subclasses to create the specific type of content item.
@@ -159,4 +157,4 @@ class RsyncAdapterBase:
         Delete items if needed.
         This method should be implemented by subclasses to delete the specific type of content item.
         """
-        raise NotImplementedError()
+        return

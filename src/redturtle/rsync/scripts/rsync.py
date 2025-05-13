@@ -8,8 +8,8 @@ import argparse
 import logging
 import re
 import sys
-import uuid
 import transaction
+import uuid
 
 
 logger = logging.getLogger(__name__)
@@ -79,6 +79,18 @@ class ScriptRunner:
             re.MULTILINE | re.DOTALL,
         )
 
+    def get_frontend_url(self, item):
+        frontend_domain = api.portal.get_registry_record(
+            name="volto.frontend_domain", default=""
+        )
+        if not frontend_domain or frontend_domain == "https://":
+            frontend_domain = "http://localhost:3000"
+        if frontend_domain.endswith("/"):
+            frontend_domain = frontend_domain[:-1]
+        portal_url = api.portal.get().portal_url()
+
+        return item.absolute_url().replace(portal_url, frontend_domain)
+
     def log_info(self, msg, type="info"):
         """
         append a message to the logdata list and print it.
@@ -117,7 +129,7 @@ class ScriptRunner:
         api.content.create(
             logcontainer,
             "Document",
-            title=self.adapter.log_item_title(start=self.start),
+            title=self.adapter.log_item_title(start=self.start, options=self.options),
             description=description,
             blocks={
                 blockid: {
@@ -154,12 +166,12 @@ class ScriptRunner:
             return None
         return data
 
-    def create_item(self, row):
+    def create_item(self, row, options):
         """
         Create the item.
         """
         try:
-            res = self.adapter.create_item(row)
+            res = self.adapter.create_item(row=row, options=self.options)
         except Exception as e:
             msg = f"[Error] Unable to create item {row}: {e}"
             self.log_info(msg=msg, type="error")
@@ -173,27 +185,27 @@ class ScriptRunner:
         if isinstance(res, list):
             self.n_created += len(res)
             for item in res:
-                msg = f"[CREATED] {item.absolute_url()}"
+                msg = f"[CREATED] {'/'.join(item.getPhysicalPath())}"
                 self.log_info(msg=msg)
         else:
             self.n_created += 1
-            msg = f"[CREATED] {item.absolute_url()}"
+            msg = f"[CREATED] {'/'.join(res.getPhysicalPath())}"
             self.log_info(msg=msg)
         return res
 
-    def update_item(self, item, row):
+    def update_item(self, item, row, options):
         """
         Update the item.
         """
         try:
-            res = self.adapter.update_item(item=item, row=row)
+            res = self.adapter.update_item(item=item, row=row, options=options)
         except Exception as e:
-            msg = f"[Error] Unable to update item {item.absolute_url()}: {e}"
+            msg = f"[Error] Unable to update item {self.get_frontend_url(item)}: {e}"
             self.log_info(msg=msg, type="error")
             return
 
         if not res:
-            msg = f"[SKIPPED] {item.absolute_url()}"
+            msg = f"[SKIPPED] {self.get_frontend_url(item)}"
             self.log_info(msg=msg)
             return
 
@@ -206,7 +218,7 @@ class ScriptRunner:
                 self.sync_uids.add(updated.UID())
         else:
             self.n_updated += 1
-            msg = f"[UPDATED] {item.absolute_url()}"
+            msg = f"[UPDATED] {self.get_frontend_url(item)}"
             self.log_info(msg=msg)
             self.sync_uids.add(item.UID())
 
@@ -242,35 +254,42 @@ class ScriptRunner:
         self.n_items = len(data)
         self.log_info(msg=f"START - ITERATE DATA ({self.n_items} items)")
 
-        last_commit = 0
+        # last_commit = 0
         i = 0
-        for row in data:
+        for row in data[:200]:
             i += 1
-            item = self.adapter.find_item_from_row(row)
+            if i % 100 == 0:
+                logger.info(f"Progress: {i}/{self.n_items}")
+            try:
+                item = self.adapter.find_item_from_row(row=row, options=self.options)
+            except Exception as e:
+                msg = f"[Error] Unable to find item from row {row}: {e}"
+                self.log_info(msg=msg, type="error")
+                continue
             if not item:
-                self.create_item(row=row)
+                self.create_item(row=row, options=self.options)
             else:
-                self.update_item(item=item, row=row)
+                self.update_item(item=item, row=row, options=self.options)
 
-            if self.n_updated + self.n_created - last_commit > 5:
-                last_commit = self.n_updated + self.n_created
-                if not getattr(self.options, "dry_run", False):
-                    logger.info(
-                        f"[{datetime.now()}] COMMIT ({i}/{self.n_items} items processed)"
-                    )
-                    transaction.commit()
+            # if self.n_updated + self.n_created - last_commit > 5:
+            #     last_commit = self.n_updated + self.n_created
+            #     if not getattr(self.options, "dry_run", False):
+            #         logger.info(
+            #             f"[{datetime.now()}] COMMIT ({i}/{self.n_items} items processed)"
+            #         )
+            #         transaction.commit()
 
         self.delete_items(data)
 
 
 def _main(args):
-
-    runner = ScriptRunner(args=args)
-    runner.rsync()
-    runner.write_log()
-    if not getattr(runner.options, "dry_run", False):
-        print(f"[{datetime.now()}] COMMIT")
-        transaction.commit()
+    with api.env.adopt_user(username="admin"):
+        runner = ScriptRunner(args=args)
+        runner.rsync()
+        runner.write_log()
+        if not getattr(runner.options, "dry_run", False):
+            print(f"[{datetime.now()}] COMMIT")
+            transaction.commit()
 
 
 def main():

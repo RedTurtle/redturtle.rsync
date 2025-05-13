@@ -14,7 +14,7 @@ class IRedturtleRsyncAdapter(Interface):
     def __init__(context, request):
         """Initialize the adapter with the given context and request."""
 
-    def log_item_title(start):
+    def log_item_title(start, options):
         """
         Return the title of the log item for the rsync command.
         """
