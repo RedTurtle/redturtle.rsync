@@ -3,7 +3,8 @@
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
     xmlns:i18n="http://namespaces.zope.org/i18n"
     xmlns:plone="http://namespaces.plone.org/plone"
-    i18n_domain="redturtle.rsync">
+    i18n_domain="redturtle.rsync"
+    >
 
   <i18n:registerTranslations directory="locales" />
 
@@ -16,23 +17,24 @@
   <!-- has to be loaded before permissions are used, so keep above views aso. -->
   <include file="permissions.zcml" />
 
+  <include package=".adapters" />
   <include package=".browser" />
 
   <genericsetup:registerProfile
       name="default"
       title="redturtle.rsync"
-      directory="profiles/default"
       description="Installs the redturtle.rsync add-on."
       provides="Products.GenericSetup.interfaces.EXTENSION"
+      directory="profiles/default"
       post_handler=".setuphandlers.post_install"
       />
 
   <genericsetup:registerProfile
       name="uninstall"
       title="redturtle.rsync (uninstall)"
-      directory="profiles/uninstall"
       description="Uninstalls the redturtle.rsync add-on."
       provides="Products.GenericSetup.interfaces.EXTENSION"
+      directory="profiles/uninstall"
       post_handler=".setuphandlers.uninstall"
       />
 

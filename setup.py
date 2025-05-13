@@ -73,5 +73,6 @@ setup(
     target = plone
     [console_scripts]
     update_locale = redturtle.rsync.locales.update:update_locale
+    redturtle_rsync = redturtle.rsync.scripts.rsync:main
     """,
 )
