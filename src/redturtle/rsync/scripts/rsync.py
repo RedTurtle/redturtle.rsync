@@ -258,7 +258,7 @@ class ScriptRunner:
 
         # last_commit = 0
         i = 0
-        for row in data[:200]:
+        for row in data:
             i += 1
             if i % 100 == 0:
                 logger.info(f"Progress: {i}/{self.n_items}")
