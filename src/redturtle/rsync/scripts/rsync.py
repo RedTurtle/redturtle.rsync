@@ -98,7 +98,9 @@ class ScriptRunner:
         style = ""
         if type == "error":
             style = "padding:5px;background-color:red;color:#fff"
-        msg = f"[{datetime.now()}] {msg}"
+        if type == "warning":
+            style = "padding:5px;background-color:#ff9d00;color:#fff"
+        msg = f"[{datetime.now().strftime('%d-%m-%Y %H:%M:%S')}] {msg}"
         self.logdata.append(f'<p style="{style}">{self.autolink(msg)}</p>')
 
         # print the message
@@ -162,7 +164,7 @@ class ScriptRunner:
             return None
         if not data:
             msg = "No data to sync."
-            self.log_info(msg=msg, type="error")
+            self.log_info(msg=msg, type="warning")
             return None
         return data
 
@@ -173,6 +175,9 @@ class ScriptRunner:
         try:
             res = self.adapter.create_item(row=row, options=self.options)
         except Exception as e:
+            import pdb
+
+            pdb.set_trace()
             msg = f"[Error] Unable to create item {row}: {e}"
             self.log_info(msg=msg, type="error")
             return
