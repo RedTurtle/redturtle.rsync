@@ -68,6 +68,7 @@ class ScriptRunner:
         """
         start = datetime.now()
         logger.info(f"[{start}] - START RSYNC")
+        self.adapter.setup_environment()
         data = self.adapter.get_data()
         if data:
             n_items = len(data)
@@ -80,11 +81,7 @@ class ScriptRunner:
                 if i % 100 == 0:
                     logger.info(f"Progress: {i}/{n_items}")
 
-                item = self.adapter.find_item_from_row(row=row)
-                if not item:
-                    self.adapter.create_item(row=row)
-                else:
-                    self.adapter.update_item(item=item, row=row)
+                self.adapter.create_or_update_item(row=row)
 
         self.adapter.delete_items(data)
 

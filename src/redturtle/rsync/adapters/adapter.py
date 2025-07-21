@@ -179,6 +179,10 @@ class RsyncAdapterBase:
         """
         return
 
+    def setup_environment(self):
+        """ """
+        return
+
     def get_data(self):
         """ """
         try:
@@ -212,6 +216,13 @@ class RsyncAdapterBase:
             self.log_info(msg=msg, type="error")
             return None
 
+    def create_or_update_item(self, row):
+        item = self.find_item_from_row(row=row)
+        if not item:
+            self.create_item(row=row)
+        else:
+            self.update_item(item=item, row=row)
+
     def create_item(self, row):
         """
         Create the item.
@@ -223,8 +234,8 @@ class RsyncAdapterBase:
             self.log_info(msg=msg, type="error")
             return
         if not res:
-            msg = f"[Error] item {row} not created."
-            self.log_info(msg=msg, type="error")
+            msg = f"[SKIPPED] item {row} not created."
+            self.log_info(msg=msg)
             return
 
         # adapter could create a list of items (maybe also children or related items)
