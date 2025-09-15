@@ -8,6 +8,11 @@ from zope.interface import Interface
 from plone import api
 from datetime import datetime
 from redturtle.rsync.scripts.rsync import logger
+from email.message import EmailMessage
+from email.utils import formataddr
+from plone.registry.interfaces import IRegistry
+from Products.CMFPlone.interfaces.controlpanel import IMailSchema
+from zope.component import getUtility
 
 import json
 import requests
@@ -51,6 +56,7 @@ class RsyncAdapterBase:
         self.sync_uids = set()
         self.start = datetime.now()
         self.end = None
+        self.send_log_template = None
 
     def requests_retry_session(
         self,
@@ -113,11 +119,13 @@ class RsyncAdapterBase:
         """
         style = ""
         if type == "error":
-            style = "padding:5px;background-color:red;color:#fff"
+            style = "padding:2px;background-color:red;color:#fff"
         if type == "warning":
-            style = "padding:5px;background-color:#ff9d00;color:#fff"
-        msg = f"[{datetime.now().strftime('%d-%m-%Y %H:%M:%S')}] {msg}"
-        self.logdata.append(f'<p style="{style}">{self.autolink(msg)}</p>')
+            style = "padding:2px;background-color:#ff9d00;color:#fff"
+        # msg = f"[{datetime.now().strftime('%d-%m-%Y %H:%M:%S')}] {msg}"
+        self.logdata.append(
+            f'<p><span style="{style}">[{datetime.now().strftime("%d-%m-%Y %H:%M:%S")}]</span>&nbsp;{self.autolink(msg)}</p>'
+        )
 
         # print the message on standard output
         if type == "error":
@@ -165,6 +173,46 @@ class RsyncAdapterBase:
                 "items": [blockid],
             },
         )
+
+    def send_log(self):
+        """
+        Send the log by email.
+        """
+
+        send_to_email = getattr(self.options, "send_to_email", None)
+        if not send_to_email:
+            return
+        if not self.send_log_template:
+            logger.warning("No email template found, skipping log send by email.")
+            return
+        mailhost = api.portal.get_tool(name="MailHost")
+        if not mailhost:
+            logger.warning("No MailHost found, skipping log send by email.")
+            return
+
+        body_view = api.content.get_view(
+            name=self.send_log_template, context=self.context, request=self.request
+        )
+        body = body_view(logs=self.logdata)
+        encoding = api.portal.get_registry_record(
+            "plone.email_charset", default="utf-8"
+        )
+
+        registry = getUtility(IRegistry)
+        mail_settings = registry.forInterface(IMailSchema, prefix="plone")
+        email_from_address = mail_settings.email_from_address
+        email_from_name = mail_settings.email_from_name
+        mfrom = formataddr((email_from_name, email_from_address))
+
+        msg = EmailMessage()
+        msg.set_content(body)
+        msg["Subject"] = self.log_item_title(start=self.start)
+        msg["From"] = mfrom
+        msg["Reply-To"] = mfrom
+        msg["To"] = send_to_email
+        msg.replace_header("Content-Type", 'text/html; charset="utf-8"')
+
+        mailhost.send(msg, charset=encoding)
 
     def set_args(self, parser):
         """

@@ -50,6 +50,13 @@ class ScriptRunner:
             help="Log destination path (relative to Plone site)",
         )
 
+        # email to send the log to
+        parser.add_argument(
+            "--send-to-email",
+            default=None,
+            help="Email address to send the log to",
+        )
+
         # set data source
         group = parser.add_mutually_exclusive_group(required=True)
         group.add_argument("--source-path", help="Local source path")
@@ -87,6 +94,8 @@ class ScriptRunner:
 
         # finish, write log
         self.adapter.write_log()
+        # send log by email
+        self.adapter.send_log()
         end = datetime.now()
         delta = end - start
         total_seconds = int(delta.total_seconds())
@@ -106,6 +115,9 @@ def _main(args):
         runner.rsync()
         if not getattr(runner.options, "dry_run", False):
             print(f"[{datetime.now()}] COMMIT")
+            transaction.get().note(
+                runner.adapter.log_item_title(start=runner.adapter.start)
+            )
             transaction.commit()
 
 
