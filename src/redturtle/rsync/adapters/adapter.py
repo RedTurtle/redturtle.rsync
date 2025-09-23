@@ -1,22 +1,22 @@
+from datetime import datetime
+from email.message import EmailMessage
+from email.utils import formataddr
 from pathlib import Path
+from plone import api
+from plone.registry.interfaces import IRegistry
+from Products.CMFPlone.interfaces.controlpanel import IMailSchema
 from redturtle.rsync.interfaces import IRedturtleRsyncAdapter
+from redturtle.rsync.scripts.rsync import logger
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
 from zope.component import adapter
+from zope.component import getUtility
 from zope.interface import implementer
 from zope.interface import Interface
-from plone import api
-from datetime import datetime
-from redturtle.rsync.scripts.rsync import logger
-from email.message import EmailMessage
-from email.utils import formataddr
-from plone.registry.interfaces import IRegistry
-from Products.CMFPlone.interfaces.controlpanel import IMailSchema
-from zope.component import getUtility
 
 import json
-import requests
 import re
+import requests
 import uuid
 
 
