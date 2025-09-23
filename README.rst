@@ -31,34 +31,30 @@
 redturtle.rsync
 ===============
 
-An add-on for Plone
+This package provides sync features to massive upload contents in a Plone site.
+
+It generates a script in bin/redturtle_rsync that accept the following parameters:
+
+    - `--dry-run`: Dry-run mode (default is False)
+    - `--verbose`: Verbose mode (default is False)
+    - `--logpath LOGPATH`: Log destination path (relative to Plone site)
+    - `--send-to-email SEND_TO_EMAIL`: Email address to send the log to
+    - `--source-path SOURCE_PATH`: Local data source path (complementary to source-url)
+    - `--source-url SOURCE_URL`: Remote data source URL (complementary to source-path)
+
+Example::
+
+    ./bin/instance -OPlone run bin/redturtle_rsync --logpath /Plone/it/test-sync/log-sync --source-path /opt/some-data
+
 
 Features
 --------
 
-- Can be bullet points
+This package provides a general tool to sync data and upload them in a Plone site.
 
+You need to create an add-on to manage your specific data structure and content types that creates an adapter for IRedturtleRsyncAdapter.
 
-Examples
---------
-
-This add-on can be seen in action at the following sites:
-- Is there a page on the internet where everybody can see the features?
-
-
-Documentation
--------------
-
-Full documentation for end users can be found in the "docs" folder, and is also available online at http://docs.plone.org/foo/bar
-
-
-Translations
-------------
-
-This product has been translated into
-
-- Klingon (thanks, K'Plai)
-
+It is also possible to add additional script options.
 
 Installation
 ------------
@@ -79,30 +75,19 @@ and then running ``bin/buildout``
 Authors
 -------
 
-Provided by awesome people ;)
+This product was developed by **RedTurtle Technology** team.
 
-
-Contributors
-------------
-
-Put your name here, you deserve it!
-
-- ?
+.. image:: https://avatars1.githubusercontent.com/u/1087171?s=100&v=4
+   :alt: RedTurtle Technology Site
+   :target: http://www.redturtle.it/
 
 
 Contribute
 ----------
 
-- Issue Tracker: https://github.com/collective/redturtle.rsync/issues
-- Source Code: https://github.com/collective/redturtle.rsync
-- Documentation: https://docs.plone.org/foo/bar
+- Issue Tracker: https://github.com/RedTurtle/redturtle.rsync/issues
+- Source Code: https://github.com/RedTurtle/redturtle.rsync
 
-
-Support
--------
-
-If you are having issues, please let us know.
-We have a mailing list located at: project@example.com
 
 
 License
