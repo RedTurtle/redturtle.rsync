@@ -242,7 +242,7 @@ class RsyncAdapterBase:
             return
         if not data:
             msg = "No data to sync."
-            self.log_info(msg=msg, type="warning")
+            self.log_info(msg=msg, type="info", force_sys_log=True)
             return
         return data
 
