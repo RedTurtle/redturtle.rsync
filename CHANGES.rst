@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-1.0.1 (unreleased)
+1.0.1 (2025-10-15)
 ------------------
 
 - Fix log when there is no data to sync (from WARNING to INFO).
