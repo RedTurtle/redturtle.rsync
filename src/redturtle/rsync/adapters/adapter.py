@@ -239,11 +239,11 @@ class RsyncAdapterBase:
             logger.exception(e)
             msg = f"Error in data generation: {e}"
             self.log_info(msg=msg, type="error")
-            return
+            return []
         if not data:
             msg = "No data to sync."
             self.log_info(msg=msg, type="info", force_sys_log=True)
-            return
+            return []
         return data
 
     def convert_source_data(self, data):
