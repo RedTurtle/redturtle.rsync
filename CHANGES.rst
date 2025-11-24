@@ -5,7 +5,8 @@ Changelog
 1.0.3 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Do not reindex updated objects if not necessary.
+  [cekk]
 
 
 1.0.2 (2025-11-20)
