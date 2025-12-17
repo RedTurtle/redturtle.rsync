@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-1.0.4 (unreleased)
+1.0.4 (2025-12-17)
 ------------------
 
 - Add intermediate commit option.
