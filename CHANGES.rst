@@ -5,7 +5,8 @@ Changelog
 1.0.4 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Add intermediate commit option.
+  [cekk]
 
 
 1.0.3 (2025-11-24)

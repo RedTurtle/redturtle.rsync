@@ -57,6 +57,12 @@ class ScriptRunner:
             help="Email address to send the log to",
         )
 
+        # commit
+        parser.add_argument(
+            "--intermediate-commit",
+            default=None,
+            help="Do an intermediate commit every x items",
+        )
         # set data source
         group = parser.add_mutually_exclusive_group(required=True)
         group.add_argument("--source-path", help="Local source path")
@@ -77,6 +83,9 @@ class ScriptRunner:
         logger.info(f"[{start}] - START RSYNC")
         self.adapter.setup_environment()
         data = self.adapter.get_data()
+
+        intermediate_commit = int(getattr(self.options, "intermediate_commit", 0))
+
         if data:
             n_items = len(data)
             logger.info(f"START - ITERATE DATA ({n_items} items)")
@@ -87,7 +96,12 @@ class ScriptRunner:
                 i += 1
                 if i % 100 == 0:
                     logger.info(f"Progress: {i}/{n_items}")
-
+                if intermediate_commit and not getattr(self.options, "dry_run", False):
+                    if i % intermediate_commit == 0:
+                        msg = f"RSYNC INTERMEDIATE COMMIT EVERY {intermediate_commit} items."
+                        transaction.get().note(msg)
+                        transaction.commit()
+                        logger.info(msg)
                 self.adapter.create_or_update_item(row=row)
 
         self.adapter.delete_items(data)
@@ -114,7 +128,7 @@ def _main(args):
         runner = ScriptRunner(args=args)
         runner.rsync()
         if not getattr(runner.options, "dry_run", False):
-            print(f"[{datetime.now()}] COMMIT")
+            logger.info(f"FINAL COMMIT")
             transaction.get().note(
                 runner.adapter.log_item_title(start=runner.adapter.start)
             )

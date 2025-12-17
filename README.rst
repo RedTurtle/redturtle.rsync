@@ -41,6 +41,7 @@ It generates a script in bin/redturtle_rsync that accept the following parameter
     - `--send-to-email SEND_TO_EMAIL`: Email address to send the log to
     - `--source-path SOURCE_PATH`: Local data source path (complementary to source-url)
     - `--source-url SOURCE_URL`: Remote data source URL (complementary to source-path)
+    - `--intermediate-commit`: Do a commit every x items
 
 Example::
 
