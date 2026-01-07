@@ -206,12 +206,13 @@ class RsyncAdapterBase:
         mfrom = formataddr((email_from_name, email_from_address))
 
         msg = EmailMessage()
-        msg.set_content(body)
+        msg.set_content(body, charset="utf-8")
+        msg.add_alternative(body, subtype="html", charset="utf-8")
+
         msg["Subject"] = self.log_item_title(start=self.start)
         msg["From"] = mfrom
         msg["Reply-To"] = mfrom
         msg["To"] = send_to_email
-        msg.replace_header("Content-Type", 'text/html; charset="utf-8"')
 
         mailhost.send(msg, charset=encoding)
 

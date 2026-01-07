@@ -84,7 +84,9 @@ class ScriptRunner:
         self.adapter.setup_environment()
         data = self.adapter.get_data()
 
-        intermediate_commit = int(getattr(self.options, "intermediate_commit", 0))
+        intermediate_commit = getattr(self.options, "intermediate_commit", 0) or 0
+
+        intermediate_commit = int(intermediate_commit)
 
         if data:
             n_items = len(data)

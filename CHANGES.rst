@@ -5,7 +5,8 @@ Changelog
 1.0.6 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fix mail send coding.
+  [cekk]
 
 
 1.0.5 (2026-01-07)
