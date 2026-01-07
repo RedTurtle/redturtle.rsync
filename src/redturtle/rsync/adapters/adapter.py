@@ -13,6 +13,7 @@ from zope.component import adapter
 from zope.component import getUtility
 from zope.interface import implementer
 from zope.interface import Interface
+from redturtle.rsync import _
 
 import json
 import re
@@ -260,7 +261,13 @@ class RsyncAdapterBase:
         try:
             return self.do_find_item_from_row(row=row)
         except Exception as e:
-            msg = f"[Error] Unable to find item from row {row}: {e}"
+            msg = api.portal.translate(
+                _(
+                    "find_item_error_msg",
+                    default="[ERROR] Unable to find item from row ${row}: ${e}",
+                    mapping={"row": row, "e": str(e)},
+                )
+            )
             self.log_info(msg=msg, type="error")
             return None
 
@@ -278,11 +285,23 @@ class RsyncAdapterBase:
         try:
             res = self.do_create_item(row=row)
         except Exception as e:
-            msg = f"[Error] Unable to create item {row}: {e}"
+            msg = api.portal.translate(
+                _(
+                    "create_item_error_msg",
+                    default="[ERROR] Unable to create item ${row}: ${e}",
+                    mapping={"row": row, "e": str(e)},
+                )
+            )
             self.log_info(msg=msg, type="error")
             return
         if not res:
-            msg = f"[SKIPPED] item {row} not created."
+            msg = api.portal.translate(
+                _(
+                    "create_item_skip_msg",
+                    default="[SKIP] Item ${row} not created.",
+                    mapping={"row": row},
+                )
+            )
             self.log_info(msg=msg)
             return
 
@@ -290,11 +309,23 @@ class RsyncAdapterBase:
         if isinstance(res, list):
             self.n_created += len(res)
             for item in res:
-                msg = f"[CREATED] {'/'.join(item.getPhysicalPath())}"
+                msg = api.portal.translate(
+                    _(
+                        "create_item_success_msg",
+                        default="[CREATED] ${path}",
+                        mapping={"path": "/".join(item.getPhysicalPath())},
+                    )
+                )
                 self.log_info(msg=msg)
         else:
             self.n_created += 1
-            msg = f"[CREATED] {'/'.join(res.getPhysicalPath())}"
+            msg = api.portal.translate(
+                _(
+                    "create_item_success_msg",
+                    default="[CREATED] ${path}",
+                    mapping={"path": "/".join(res.getPhysicalPath())},
+                )
+            )
             self.log_info(msg=msg)
         return res
 
@@ -305,24 +336,48 @@ class RsyncAdapterBase:
         try:
             res = self.do_update_item(item=item, row=row)
         except Exception as e:
-            msg = f"[Error] Unable to update item {self.get_frontend_url(item)}: {e}"
+            msg = api.portal.translate(
+                _(
+                    "update_item_error_msg",
+                    default="[ERROR] Unable to update item ${path}: ${e}",
+                    mapping={"path": "/".join(item.getPhysicalPath()), "e": str(e)},
+                )
+            )
             self.log_info(msg=msg, type="error")
             return
 
         if not res:
-            msg = f"[SKIPPED] {self.get_frontend_url(item)}"
+            msg = api.portal.translate(
+                _(
+                    "update_item_skip_msg",
+                    default="[SKIP] ${path}",
+                    mapping={"path": "/".join(item.getPhysicalPath())},
+                )
+            )
             self.log_info(msg=msg)
             return
 
         if isinstance(res, list):
             self.n_updated += len(res)
             for updated in res:
-                msg = f"[UPDATED] {updated.absolute_url()}"
+                msg = api.portal.translate(
+                    _(
+                        "update_item_success_msg",
+                        default="[UPDATE] ${path}",
+                        mapping={"path": "/".join(updated.getPhysicalPath())},
+                    )
+                )
                 self.log_info(msg=msg)
                 self.sync_uids.add(updated.UID())
         else:
             self.n_updated += 1
-            msg = f"[UPDATED] {self.get_frontend_url(item)}"
+            msg = api.portal.translate(
+                _(
+                    "update_item_success_msg",
+                    default="[UPDATE] ${path}",
+                    mapping={"path": "/".join(item.getPhysicalPath())},
+                )
+            )
             self.log_info(msg=msg)
             self.sync_uids.add(item.UID())
 
@@ -336,11 +391,23 @@ class RsyncAdapterBase:
         if isinstance(res, list):
             self.n_todelete += len(res)
             for item in res:
-                msg = f"[DELETED] {item}"
+                msg = api.portal.translate(
+                    _(
+                        "delete_item_success_msg",
+                        default="[DELETE] ${item}",
+                        mapping={"item": item},
+                    )
+                )
                 self.log_info(msg=msg)
         else:
             self.n_todelete += 1
-            msg = f"[DELETED] {res}"
+            msg = api.portal.translate(
+                _(
+                    "delete_item_success_msg",
+                    default="[DELETE] ${item}",
+                    mapping={"item": res},
+                )
+            )
             self.log_info(msg=msg)
 
     def do_get_data(self):

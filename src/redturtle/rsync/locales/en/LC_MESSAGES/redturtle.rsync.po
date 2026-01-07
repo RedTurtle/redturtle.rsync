@@ -1,0 +1,71 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2026-01-07 11:25+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: DOMAIN\n"
+
+#: ../configure.zcml:30
+msgid "Installs the redturtle.rsync add-on."
+msgstr ""
+
+#: ../configure.zcml:39
+msgid "Uninstalls the redturtle.rsync add-on."
+msgstr ""
+
+#. Default: "[ERROR] Unable to create item ${row}: ${e}"
+#: ../adapters/adapter.py:289
+msgid "create_item_error_msg"
+msgstr ""
+
+#. Default: "[SKIP] Item ${row} not created."
+#: ../adapters/adapter.py:299
+msgid "create_item_skip_msg"
+msgstr ""
+
+#. Default: "[CREATED] ${path}"
+#: ../adapters/adapter.py:313
+msgid "create_item_success_msg"
+msgstr ""
+
+#. Default: "[DELETE] ${item}"
+#: ../adapters/adapter.py:395
+msgid "delete_item_success_msg"
+msgstr ""
+
+#. Default: "[ERROR] Unable to find item from row ${row}: ${e}"
+#: ../adapters/adapter.py:265
+msgid "find_item_error_msg"
+msgstr ""
+
+#: ../configure.zcml:30
+msgid "redturtle.rsync"
+msgstr ""
+
+#: ../configure.zcml:39
+msgid "redturtle.rsync (uninstall)"
+msgstr ""
+
+#. Default: "[ERROR] Unable to update item ${path}: ${e}"
+#: ../adapters/adapter.py:340
+msgid "update_item_error_msg"
+msgstr ""
+
+#. Default: "[SKIP] ${path}"
+#: ../adapters/adapter.py:351
+msgid "update_item_skip_msg"
+msgstr ""
+
+#. Default: "[UPDATE] ${path}"
+#: ../adapters/adapter.py:364
+msgid "update_item_success_msg"
+msgstr ""

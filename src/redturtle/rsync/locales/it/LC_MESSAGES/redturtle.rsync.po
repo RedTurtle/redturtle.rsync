@@ -1,6 +1,3 @@
-#--- PLEASE EDIT THE LINES BELOW CORRECTLY ---
-#SOME DESCRIPTIVE TITLE.
-#FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
@@ -15,7 +12,7 @@ msgstr ""
 "Language-Code: en\n"
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
-"Domain: redturtle.rsync\n"
+"Domain: DOMAIN\n"
 
 #: ../configure.zcml:30
 msgid "Installs the redturtle.rsync add-on."
@@ -28,27 +25,27 @@ msgstr ""
 #. Default: "[ERROR] Unable to create item ${row}: ${e}"
 #: ../adapters/adapter.py:289
 msgid "create_item_error_msg"
-msgstr ""
+msgstr "[ERROR] Impossibile creare il contenuto ${row}: ${e}"
 
 #. Default: "[SKIP] Item ${row} not created."
 #: ../adapters/adapter.py:299
 msgid "create_item_skip_msg"
-msgstr ""
+msgstr "[SKIP] Contenuto ${row} non creato."
 
 #. Default: "[CREATED] ${path}"
 #: ../adapters/adapter.py:313
 msgid "create_item_success_msg"
-msgstr ""
+msgstr "[CREATE] ${path}"
 
 #. Default: "[DELETE] ${item}"
 #: ../adapters/adapter.py:395
 msgid "delete_item_success_msg"
-msgstr ""
+msgstr "[DELETE] ${item}"
 
 #. Default: "[ERROR] Unable to find item from row ${row}: ${e}"
 #: ../adapters/adapter.py:265
 msgid "find_item_error_msg"
-msgstr ""
+msgstr "[ERROR] Impossibile trovare il contenuto ${row}: ${e}"
 
 #: ../configure.zcml:30
 msgid "redturtle.rsync"
@@ -61,14 +58,14 @@ msgstr ""
 #. Default: "[ERROR] Unable to update item ${path}: ${e}"
 #: ../adapters/adapter.py:340
 msgid "update_item_error_msg"
-msgstr ""
+msgstr "[ERROR] Impossibile aggiornare ${path}: ${e}"
 
 #. Default: "[SKIP] ${path}"
 #: ../adapters/adapter.py:351
 msgid "update_item_skip_msg"
-msgstr ""
+msgstr "[SKIP] ${path}"
 
 #. Default: "[UPDATE] ${path}"
 #: ../adapters/adapter.py:364
 msgid "update_item_success_msg"
-msgstr ""
+msgstr "[UPDATE] ${path}"
