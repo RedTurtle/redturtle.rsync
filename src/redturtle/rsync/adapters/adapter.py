@@ -214,7 +214,7 @@ class RsyncAdapterBase:
         msg["Reply-To"] = mfrom
         msg["To"] = send_to_email
 
-        mailhost.send(msg, charset=encoding)
+        mailhost.send(msg.as_string(), charset=encoding)
 
     def set_args(self, parser):
         """
