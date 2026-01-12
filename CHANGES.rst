@@ -7,7 +7,8 @@ Changelog
 
 - Fix mail send coding.
   [cekk]
-
+- Add customizable last step (end_actions).
+  [cekk]
 
 1.0.5 (2026-01-07)
 ------------------

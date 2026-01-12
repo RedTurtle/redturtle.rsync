@@ -474,3 +474,8 @@ class RsyncAdapterBase:
         Delete items
         """
         raise NotImplementedError()
+
+    def end_actions(self, data=None):
+        """
+        Do something at the end of the rsync.
+        """

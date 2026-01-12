@@ -81,13 +81,18 @@ class ScriptRunner:
         """
         start = datetime.now()
         logger.info(f"[{start}] - START RSYNC")
+
+        # setup environment
         self.adapter.setup_environment()
+
+        # get data
         data = self.adapter.get_data()
 
         intermediate_commit = getattr(self.options, "intermediate_commit", 0) or 0
 
         intermediate_commit = int(intermediate_commit)
 
+        # iterate data
         if data:
             n_items = len(data)
             logger.info(f"START - ITERATE DATA ({n_items} items)")
@@ -107,6 +112,9 @@ class ScriptRunner:
                 self.adapter.create_or_update_item(row=row)
 
         self.adapter.delete_items(data)
+
+        # do something at the end
+        self.adapter.end_actions(data)
 
         # finish, write log
         self.adapter.write_log()
