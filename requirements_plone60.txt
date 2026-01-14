@@ -1,3 +1,2 @@
 -c constraints_plone60.txt
-setuptools
 zc.buildout

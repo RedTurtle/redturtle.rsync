@@ -138,7 +138,7 @@ def _main(args):
         runner = ScriptRunner(args=args)
         runner.rsync()
         if not getattr(runner.options, "dry_run", False):
-            logger.info(f"FINAL COMMIT")
+            logger.info("FINAL COMMIT")
             transaction.get().note(
                 runner.adapter.log_item_title(start=runner.adapter.start)
             )

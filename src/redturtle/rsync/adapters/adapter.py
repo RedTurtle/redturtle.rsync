@@ -5,6 +5,7 @@ from pathlib import Path
 from plone import api
 from plone.registry.interfaces import IRegistry
 from Products.CMFPlone.interfaces.controlpanel import IMailSchema
+from redturtle.rsync import _
 from redturtle.rsync.interfaces import IRedturtleRsyncAdapter
 from redturtle.rsync.scripts.rsync import logger
 from requests.adapters import HTTPAdapter
@@ -13,7 +14,6 @@ from zope.component import adapter
 from zope.component import getUtility
 from zope.interface import implementer
 from zope.interface import Interface
-from redturtle.rsync import _
 
 import json
 import re
