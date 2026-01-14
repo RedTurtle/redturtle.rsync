@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-1.0.6 (unreleased)
+1.0.6 (2026-01-14)
 ------------------
 
 - Fix mail send coding.
