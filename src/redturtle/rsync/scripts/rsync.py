@@ -9,7 +9,6 @@ import logging
 import sys
 import transaction
 
-
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
