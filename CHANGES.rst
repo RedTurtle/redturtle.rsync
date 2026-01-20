@@ -5,7 +5,8 @@ Changelog
 1.0.7 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Log exceptions.
+  [cekk]
 
 
 1.0.6 (2026-01-14)
