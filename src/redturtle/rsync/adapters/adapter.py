@@ -20,6 +20,10 @@ import re
 import requests
 import uuid
 
+import logging
+
+logger = logging.getLogger(__name__)
+
 
 class TimeoutHTTPAdapter(HTTPAdapter):
     def __init__(self, *args, **kwargs):
@@ -262,6 +266,7 @@ class RsyncAdapterBase:
         try:
             return self.do_find_item_from_row(row=row)
         except Exception as e:
+            logger.exception(e)
             msg = api.portal.translate(
                 _(
                     "find_item_error_msg",
