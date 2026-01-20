@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-1.0.7 (unreleased)
+1.0.7 (2026-01-20)
 ------------------
 
 - Log exceptions.
