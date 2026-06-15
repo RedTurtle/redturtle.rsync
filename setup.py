@@ -15,7 +15,7 @@ long_description = "\n\n".join(
 
 setup(
     name="redturtle.rsync",
-    version="1.0.8.dev0",
+    version="1.0.8",
     description="An add-on for Plone",
     long_description=long_description,
     # Get more from https://pypi.org/classifiers/

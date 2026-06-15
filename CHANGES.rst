@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-1.0.8 (unreleased)
+1.0.8 (2026-06-15)
 ------------------
 
 - fix: remove wrong logger redefinition in adapter.py.
