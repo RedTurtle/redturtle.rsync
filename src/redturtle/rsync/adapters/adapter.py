@@ -20,10 +20,6 @@ import re
 import requests
 import uuid
 
-import logging
-
-logger = logging.getLogger(__name__)
-
 
 class TimeoutHTTPAdapter(HTTPAdapter):
     def __init__(self, *args, **kwargs):
