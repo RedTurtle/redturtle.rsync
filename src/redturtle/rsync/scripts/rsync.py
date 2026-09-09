@@ -12,6 +12,26 @@ import transaction
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
+# same format used by Zope in wsgi.ini
+LOG_FORMAT = "%(asctime)s %(levelname)-7.7s [%(name)s] %(message)s"
+LOG_DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
+
+
+def setup_logging():
+    """
+    "bin/instance run" does not setup the logging, so every message is printed
+    with the Python default format, without the timestamp.
+
+    Set our format on the root logger, to have the timestamp on every line.
+    """
+    root = logging.getLogger()
+    if not root.handlers:
+        root.addHandler(logging.StreamHandler())
+    formatter = logging.Formatter(fmt=LOG_FORMAT, datefmt=LOG_DATE_FORMAT)
+    for handler in root.handlers:
+        handler.setFormatter(formatter)
+    root.setLevel(logging.INFO)
+
 
 class ScriptRunner:
     """
@@ -79,7 +99,7 @@ class ScriptRunner:
         Do the rsync.
         """
         start = datetime.now()
-        logger.info(f"[{start}] - START RSYNC")
+        logger.info("START RSYNC")
 
         # setup environment
         self.adapter.setup_environment()
@@ -127,9 +147,7 @@ class ScriptRunner:
         minutes = (total_seconds % 3600) // 60
         seconds = total_seconds % 60
 
-        logger.info(
-            f"[{end}] - END RSYNC (duration {hours:02d}:{minutes:02d}:{seconds:02d})"
-        )
+        logger.info(f"END RSYNC (duration {hours:02d}:{minutes:02d}:{seconds:02d})")
 
 
 def _main(args):
@@ -145,6 +163,7 @@ def _main(args):
 
 
 def main():
+    setup_logging()
     _main(sys.argv[3:])
 
 
