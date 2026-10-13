@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-1.0.9 (unreleased)
+1.0.9 (2026-10-13)
 ------------------
 
 - Enable timestamp logging.
