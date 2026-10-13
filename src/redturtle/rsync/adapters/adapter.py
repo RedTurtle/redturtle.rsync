@@ -280,6 +280,15 @@ class RsyncAdapterBase:
         else:
             self.update_item(item=item, row=row)
 
+    def _get_create_error_message(self, row, e):
+        return api.portal.translate(
+            _(
+                "create_item_error_msg",
+                default="[ERROR] Unable to create item ${row}: ${e}",
+                mapping={"row": row, "e": str(e)},
+            )
+        )
+
     def create_item(self, row):
         """
         Create the item.
@@ -287,13 +296,7 @@ class RsyncAdapterBase:
         try:
             res = self.do_create_item(row=row)
         except Exception as e:
-            msg = api.portal.translate(
-                _(
-                    "create_item_error_msg",
-                    default="[ERROR] Unable to create item ${row}: ${e}",
-                    mapping={"row": row, "e": str(e)},
-                )
-            )
+            msg = self._get_create_error_message(row, e)
             self.log_info(msg=msg, type="error")
             return
         if not res:

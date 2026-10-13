@@ -5,7 +5,8 @@ Changelog
 1.0.9 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Enable timestamp logging.
+  [cekk]
 
 
 1.0.8 (2026-06-15)
